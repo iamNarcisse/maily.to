@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 const configSchema = z.object({
   appUrl: z.string(),
-  googleTrackingId: z.string(),
   supabase: z.object({
     url: z.string(),
     anonKey: z.string(),
