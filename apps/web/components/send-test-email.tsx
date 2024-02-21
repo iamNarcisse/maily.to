@@ -40,9 +40,8 @@ export function SendTestEmail() {
   const [action] = useServerAction(
     catchActionError(sendTestEmailAction),
     (result) => {
-      const { error } = result;
-      if (error) {
-        toast.error(error.message || 'Something went wrong');
+      if (result?.error) {
+        toast.error(result?.error?.message || 'Something went wrong');
         return;
       }
 

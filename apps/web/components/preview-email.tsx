@@ -51,12 +51,12 @@ export function PreviewEmail() {
   const [action, isPending] = useServerAction(
     catchActionError(previewEmailAction),
     (result) => {
-      const { data, error } = result;
-      if (error) {
-        toast.error(error.message || 'Something went wrong');
+      if (result?.error) {
+        toast.error(result?.error.message || 'Something went wrong');
         return;
       }
-      setHtml(data);
+
+      setHtml(result?.data || '');
     }
   );
 
