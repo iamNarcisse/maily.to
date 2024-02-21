@@ -4,8 +4,15 @@ import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import { Toaster } from 'sonner';
 import { GoogleTagManager } from '@next/third-parties/google';
+import { cookies } from 'next/headers';
 import { TopLoader } from '@/components/top-loader';
 import { config } from '@/lib/config';
+import {
+  MAILY_API_KEY,
+  MAILY_ENDPOINT,
+  MAILY_PROVIDER,
+} from '@/utils/constants';
+import { EditorProvider } from '@/stores/editor-store';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -61,11 +68,18 @@ export interface RootLayoutProps {
 export default function RootLayout(props: RootLayoutProps) {
   const { children } = props;
 
+  const cookieStore = cookies();
+  const apiKey = cookieStore.get(MAILY_API_KEY)?.value;
+  const endpoint = cookieStore.get(MAILY_ENDPOINT)?.value;
+  const provider = cookieStore.get(MAILY_PROVIDER)?.value;
+
   return (
     <html lang="en">
       <body className={inter.className}>
         <TopLoader />
-        {children}
+        <EditorProvider apiKey={apiKey} endpoint={endpoint} provider={provider}>
+          {children}
+        </EditorProvider>
         <Toaster richColors />
         <GoogleTagManager gtmId={config.googleTrackingId} />
       </body>
