@@ -2,17 +2,15 @@ import './globals.css';
 
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
-import { Toaster } from 'sonner';
-import { GoogleTagManager } from '@next/third-parties/google';
 import { cookies } from 'next/headers';
-import { TopLoader } from '@/components/top-loader';
-import { config } from '@/lib/config';
+import { Toaster } from 'sonner';
 import {
   MAILY_API_KEY,
   MAILY_ENDPOINT,
   MAILY_PROVIDER,
 } from '@/utils/constants';
 import { EditorProvider } from '@/stores/editor-store';
+import { TopLoader } from '@/components/top-loader';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -79,7 +77,7 @@ export default function RootLayout(props: RootLayoutProps) {
           {children}
         </EditorProvider>
         <Toaster richColors />
-        <GoogleTagManager gtmId={config.googleTrackingId} />
+        {/* <GoogleTagManager gtmId={config.googleTrackingId} /> */}
       </body>
     </html>
   );
