@@ -67,12 +67,10 @@ export interface RootLayoutProps {
 
 export default function RootLayout(props: RootLayoutProps) {
   const { children } = props;
-
   const cookieStore = cookies();
   const apiKey = cookieStore.get(MAILY_API_KEY)?.value;
   const endpoint = cookieStore.get(MAILY_ENDPOINT)?.value;
   const provider = cookieStore.get(MAILY_PROVIDER)?.value;
-
   return (
     <html lang="en">
       <body className={inter.className}>
