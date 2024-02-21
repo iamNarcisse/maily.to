@@ -10,15 +10,9 @@ import { config } from '@/lib/config';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://maily.to'),
-  title: 'Maily - Open-source editor for crafting emails',
-  description:
-    'Craft beautiful emails effortlessly with Maily, the powerful email editor that ensures impeccable communication across all major clients.',
-  twitter: {
-    creator: '@imarikchakma',
-    title: 'Maily - Open-source editor for crafting emails',
-    card: 'summary_large_image',
-  },
+  metadataBase: new URL('https://jigsawstack.com'),
+  title: 'Email Editor',
+  description: 'Email editor based on Maily.to',
   icons: {
     icon: [
       {
@@ -42,10 +36,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    siteName: 'Maily',
-    title: 'Maily - Open-source editor for crafting emails',
-    description:
-      'Craft beautiful emails effortlessly with Maily, the powerful email editor that ensures impeccable communication across all major clients.',
+    siteName: 'Jigsawstack',
+    description: 'Email editor based on Maily.to',
     type: 'website',
     url: 'https://maily.to',
     locale: 'en-US',
