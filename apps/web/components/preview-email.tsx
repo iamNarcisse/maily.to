@@ -5,12 +5,12 @@ import { Eye, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { shallow } from 'zustand/shallow';
+import { EmailFrame } from './email-frame';
+import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
 import { previewEmailAction } from '@/actions/email';
 import { useServerAction } from '@/utils/use-server-action';
 import { useEditorContext } from '@/stores/editor-store';
 import { catchActionError } from '@/actions/error';
-import { EmailFrame } from './email-frame';
-import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
 
 interface SubmitButtonProps {
   disabled?: boolean;
@@ -51,8 +51,7 @@ export function PreviewEmail() {
   const [action, isPending] = useServerAction(
     catchActionError(previewEmailAction),
     (result) => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Result is always there
-      const { data, error } = result!;
+      const { data, error } = result;
       if (error) {
         toast.error(error.message || 'Something went wrong');
         return;

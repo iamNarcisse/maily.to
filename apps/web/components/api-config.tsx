@@ -5,10 +5,6 @@ import { Cog, Loader2, PlugZap } from 'lucide-react';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { shallow } from 'zustand/shallow';
-import { useServerAction } from '@/utils/use-server-action';
-import { envelopeConfigAction } from '@/actions/config';
-import { useEditorContext } from '@/stores/editor-store';
-import { catchActionError } from '@/actions/error';
 import {
   Dialog,
   DialogContent,
@@ -19,6 +15,10 @@ import {
 } from './ui/dialog';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
+import { useServerAction } from '@/utils/use-server-action';
+import { envelopeConfigAction } from '@/actions/config';
+import { useEditorContext } from '@/stores/editor-store';
+import { catchActionError } from '@/actions/error';
 
 interface SubmitButtonProps {
   disabled?: boolean;
@@ -59,8 +59,7 @@ export function ApiConfiguration() {
   const [action, isPending] = useServerAction(
     catchActionError(envelopeConfigAction),
     (result) => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Result is always there
-      const { error, data } = result!;
+      const { error, data } = result;
       if (error) {
         toast.error(error.message || 'Something went wrong');
         return;

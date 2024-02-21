@@ -3,9 +3,9 @@
 import { useEffect, type RefObject, useRef } from 'react';
 import { MailOpen } from 'lucide-react';
 import { toast } from 'sonner';
+import { Button } from './ui/button';
 import { isSafari } from '@/utils/detect-browser';
 import { cn } from '@/utils/classname';
-import { Button } from './ui/button';
 
 type EmailFrameProps = {
   innerHTML: string;

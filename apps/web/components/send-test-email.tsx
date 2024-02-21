@@ -40,8 +40,7 @@ export function SendTestEmail() {
   const [action] = useServerAction(
     catchActionError(sendTestEmailAction),
     (result) => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Result is always there
-      const { error } = result!;
+      const { error } = result;
       if (error) {
         toast.error(error.message || 'Something went wrong');
         return;
