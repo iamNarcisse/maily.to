@@ -4,6 +4,7 @@ import type { EditorProps } from '@maily-to/core';
 import { Editor } from '@maily-to/core';
 import type { JSONContent, Editor as TiptapEditor } from '@tiptap/core';
 import { Loader2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { PreviewTextInfo } from './preview-text-info';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -16,8 +17,14 @@ interface EditorPreviewProps {
   config?: Partial<EditorProps['config']>;
 }
 
+interface MsgObject {
+  subject: string;
+  html?: string;
+}
+
 export function EditorPreview(props: EditorPreviewProps) {
   const { className, content: defaultContent, config: defaultConfig } = props;
+
   const {
     editor,
     previewText,
@@ -28,7 +35,24 @@ export function EditorPreview(props: EditorPreviewProps) {
     setSubject,
   } = useEditorContext((s) => s);
 
-  const defaultHtml = ``;
+  const [parentDefaults, setParentDefaults] = useState<MsgObject | undefined>();
+
+  const messageHandler = (e: MessageEvent) => {
+    const parseData: MsgObject = JSON.parse(e.data);
+    if (parseData.subject || parseData.html) {
+      setParentDefaults(parseData);
+      setSubject(parseData.subject || '');
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('message', messageHandler);
+    return () => {
+      window.removeEventListener('message', messageHandler);
+    };
+  }, []);
+
+  const defaultHtml = parentDefaults?.html;
 
   return (
     <div className={cn('mt-8', className)}>
