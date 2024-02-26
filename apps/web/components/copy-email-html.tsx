@@ -14,6 +14,11 @@ interface SubmitButtonProps {
   disabled?: boolean;
 }
 
+interface MsgObject {
+  subject: string;
+  html?: string;
+}
+
 function SubmitButton(props: SubmitButtonProps) {
   const { disabled } = props;
   const { pending } = useFormStatus();
@@ -32,34 +37,44 @@ function SubmitButton(props: SubmitButtonProps) {
       ) : (
         <ClipboardCopy className="inline-block shrink-0 sm:mr-1" size={16} />
       )}
-      <span className="hidden sm:inline-block">Copy HTML</span>
+      <span className="hidden sm:inline-block">Save</span>
     </button>
   );
 }
 
 export function CopyEmailHtml() {
-  const { json, previewText } = useEditorContext((s) => {
+  const { json, previewText, subject } = useEditorContext((s) => {
     return {
       json: s.json,
       previewText: s.previewText,
+      subject: s.subject,
     };
   }, shallow);
+
   const [_, copy] = useCopyToClipboard();
 
   const [action] = useServerAction(
     catchActionError(previewEmailAction),
     async (result) => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Result is always there
-      const { data, error } = result!;
+      const { data, error } = result;
       if (error) {
         toast.error(error.message || 'Something went wrong');
         return;
       }
 
+      onSave({ html: data, subject });
       await copy(data);
-      toast.success('Email HTML copied to clipboard');
+      // toast.success('Email HTML copied to clipboard');
     }
   );
+
+  const onSave = (msg: MsgObject) => {
+    const data = {
+      subject: msg.subject,
+      html: msg.html,
+    };
+    parent?.postMessage(JSON.stringify(data), '*');
+  };
 
   return (
     <form action={action}>
