@@ -37,12 +37,14 @@ export const metadata: Metadata = {
 
 export default function LandingPage() {
   return (
-    <main className="mx-auto w-full max-w-[calc(36rem+40px)] px-5">
-      <div className=" mt-6 flex items-center justify-end gap-1.5">
+    <main className="mx-auto w-full px-5">
+      <div className=" mt-6 flex items-center justify-end gap-1.5 px-2">
         <PreviewEmail />
         <CopyEmailHtml />
       </div>
-      <EditorPreview />
+      <div className="mx-auto max-w-[calc(36rem+40px)] ">
+        <EditorPreview />
+      </div>
     </main>
   );
 }
