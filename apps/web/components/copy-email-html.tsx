@@ -56,14 +56,13 @@ export function CopyEmailHtml() {
   const [action] = useServerAction(
     catchActionError(previewEmailAction),
     async (result) => {
-      const { data, error } = result;
-      if (error) {
-        toast.error(error.message || 'Something went wrong');
+      if (result?.error) {
+        toast.error(result?.error.message || 'Something went wrong');
         return;
       }
 
-      onSave({ html: data, subject });
-      await copy(data);
+      onSave({ html: result?.data, subject });
+      await copy(result?.data);
       // toast.success('Email HTML copied to clipboard');
     }
   );
