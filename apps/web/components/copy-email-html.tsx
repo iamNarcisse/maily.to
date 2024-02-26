@@ -62,7 +62,7 @@ export function CopyEmailHtml() {
       }
 
       onSave({ html: result?.data, subject });
-      await copy(result?.data);
+      await copy(result?.data || '');
       // toast.success('Email HTML copied to clipboard');
     }
   );
