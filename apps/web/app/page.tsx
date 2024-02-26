@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 export default function LandingPage() {
   return (
     <main className="mx-auto w-full max-w-[calc(36rem+40px)] px-5">
-      <div className="mt-6 flex items-center gap-1.5">
+      <div className=" mt-6 flex items-center justify-end gap-1.5">
         <PreviewEmail />
         <CopyEmailHtml />
       </div>
