@@ -1,9 +1,11 @@
 'use client';
 
 // import type { Metadata } from 'next';
+import { useEffect, useState } from 'react';
 import { CopyEmailHtml } from '@/components/copy-email-html';
 import { EditorPreview } from '@/components/editor-preview';
 import { PreviewEmail } from '@/components/preview-email';
+import { useEditorContext } from '@/stores/editor-store';
 
 // export const dynamic = 'force-static';
 
@@ -37,7 +39,36 @@ import { PreviewEmail } from '@/components/preview-email';
 //   },
 // };
 
+interface MsgObject {
+  subject: string;
+  html?: string;
+  json?: string;
+}
+
 export default function LandingPage() {
+  const [json, setJson] = useState();
+  const { setSubject } = useEditorContext((s) => s);
+
+  const messageHandler = (e: MessageEvent) => {
+    const parseData: MsgObject = JSON.parse(e.data);
+    if (parseData.subject || parseData.html) {
+      setSubject(parseData.subject || '');
+      if (parseData.json) {
+        const jsonData = JSON.parse(parseData.json);
+        if (json) {
+          setJson(jsonData);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('message', messageHandler);
+    return () => {
+      window.removeEventListener('message', messageHandler);
+    };
+  }, []);
+
   return (
     <main className="mx-auto w-full px-5">
       <div className=" mt-6 flex items-center justify-end gap-1.5 px-2">
@@ -45,7 +76,7 @@ export default function LandingPage() {
         <CopyEmailHtml />
       </div>
       <div className="mx-auto max-w-[calc(36rem+40px)] ">
-        <EditorPreview />
+        <EditorPreview content={json} />
       </div>
     </main>
   );

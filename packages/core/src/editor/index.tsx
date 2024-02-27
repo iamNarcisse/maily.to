@@ -1,8 +1,9 @@
 'use client';
 
-import { Editor as TiptapEditor, Extension, FocusPosition } from '@tiptap/core';
+import { Extension, FocusPosition, Editor as TiptapEditor } from '@tiptap/core';
 import { EditorContent, JSONContent, useEditor } from '@tiptap/react';
 
+import { useEffect, useState } from 'react';
 import { EditorBubbleMenu } from './components/editor-bubble-menu';
 import { EditorMenuBar } from './components/editor-menu-bar';
 import { ImageBubbleMenu } from './components/image-bubble-menu';
@@ -47,14 +48,22 @@ export function Editor(props: EditorProps) {
     slashCommands,
   } = props;
 
+  const [defaultContent, setDefaultContent] = useState(contentJson);
+
+  useEffect(() => {
+    if (contentJson) {
+      setDefaultContent(contentJson);
+    }
+  }, [contentJson]);
+
   let formattedContent: any = null;
-  if (contentJson) {
+  if (defaultContent) {
     formattedContent =
-      contentJson?.type === 'doc'
-        ? contentJson
+      defaultContent?.type === 'doc'
+        ? defaultContent
         : {
             type: 'doc',
-            content: contentJson,
+            content: defaultContent,
           };
   } else if (contentHtml) {
     formattedContent = contentHtml;
@@ -106,7 +115,7 @@ export function Editor(props: EditorProps) {
       content: formattedContent,
       autofocus,
     },
-    [contentJson]
+    [defaultContent]
   );
 
   if (!editor) {

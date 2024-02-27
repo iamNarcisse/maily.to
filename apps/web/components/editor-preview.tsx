@@ -17,14 +17,15 @@ interface EditorPreviewProps {
   config?: Partial<EditorProps['config']>;
 }
 
-interface MsgObject {
-  subject: string;
-  html?: string;
-  json?: string;
-}
+// interface MsgObject {
+//   subject: string;
+//   html?: string;
+//   json?: string;
+// }
 
 export function EditorPreview(props: EditorPreviewProps) {
   const { className, content: defaultContent, config: defaultConfig } = props;
+  const [jsonContent, setJsonContent] = useState(defaultContent);
 
   const {
     editor,
@@ -36,30 +37,13 @@ export function EditorPreview(props: EditorPreviewProps) {
     setSubject,
   } = useEditorContext((s) => s);
 
-  const [parentDefaults, setParentDefaults] = useState<MsgObject | undefined>();
-
-  const messageHandler = (e: MessageEvent) => {
-    const parseData: MsgObject = JSON.parse(e.data);
-    if (parseData.subject || parseData.html) {
-      setParentDefaults(parseData);
-      setSubject(parseData.subject || '');
-      if (parseData.json) {
-        const json = JSON.parse(parseData.json);
-        if (json) {
-          setJson(json);
-        }
-      }
-    }
-  };
-
   useEffect(() => {
-    window.addEventListener('message', messageHandler);
-    return () => {
-      window.removeEventListener('message', messageHandler);
-    };
-  }, []);
+    if (defaultContent) {
+      setJsonContent(defaultContent);
+    }
+  }, [defaultContent]);
 
-  const defaultHtml = parentDefaults?.html;
+  const defaultHtml = ``;
 
   return (
     <div className={cn('mt-8', className)}>
@@ -110,7 +94,7 @@ export function EditorPreview(props: EditorPreviewProps) {
             ...defaultConfig,
           }}
           contentHtml={defaultHtml}
-          contentJson={defaultContent}
+          contentJson={jsonContent}
           onCreate={(e) => {
             setEditor(e as unknown as TiptapEditor);
             setJson(e?.getJSON() || {});
