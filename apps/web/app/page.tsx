@@ -55,7 +55,7 @@ export default function LandingPage() {
       setSubject(parseData.subject || '');
       if (parseData.json) {
         const jsonData = JSON.parse(parseData.json);
-        if (json) {
+        if (jsonData) {
           setJson(jsonData);
         }
       }

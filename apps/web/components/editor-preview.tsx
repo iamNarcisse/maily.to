@@ -17,12 +17,6 @@ interface EditorPreviewProps {
   config?: Partial<EditorProps['config']>;
 }
 
-// interface MsgObject {
-//   subject: string;
-//   html?: string;
-//   json?: string;
-// }
-
 export function EditorPreview(props: EditorPreviewProps) {
   const { className, content: defaultContent, config: defaultConfig } = props;
   const [jsonContent, setJsonContent] = useState(defaultContent);
