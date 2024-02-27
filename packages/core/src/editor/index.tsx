@@ -95,6 +95,7 @@ export function Editor(props: EditorProps) {
       onUpdate: ({ editor }) => {
         onUpdate?.(editor);
       },
+
       extensions: [
         ...defaultExtensions({
           variables,
@@ -105,7 +106,7 @@ export function Editor(props: EditorProps) {
       content: formattedContent,
       autofocus,
     },
-    [formattedContent]
+    [contentJson]
   );
 
   if (!editor) {
