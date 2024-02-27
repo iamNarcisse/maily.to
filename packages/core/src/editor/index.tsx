@@ -70,40 +70,43 @@ export function Editor(props: EditorProps) {
     };
   }
 
-  const editor = useEditor({
-    editorProps: {
-      attributes: {
-        class: cn(`mly-prose mly-w-full`, contentClassName),
-        spellCheck: spellCheck ? 'true' : 'false',
-      },
-      handleDOMEvents: {
-        keydown: (_view, event) => {
-          // prevent default event listeners from firing when slash command is active
-          if (['ArrowUp', 'ArrowDown', 'Enter'].includes(event.key)) {
-            const slashCommand = document.querySelector('#slash-command');
-            if (slashCommand) {
-              return true;
+  const editor = useEditor(
+    {
+      editorProps: {
+        attributes: {
+          class: cn(`mly-prose mly-w-full`, contentClassName),
+          spellCheck: spellCheck ? 'true' : 'false',
+        },
+        handleDOMEvents: {
+          keydown: (_view, event) => {
+            // prevent default event listeners from firing when slash command is active
+            if (['ArrowUp', 'ArrowDown', 'Enter'].includes(event.key)) {
+              const slashCommand = document.querySelector('#slash-command');
+              if (slashCommand) {
+                return true;
+              }
             }
-          }
+          },
         },
       },
+      onCreate: ({ editor }) => {
+        onCreate?.(editor);
+      },
+      onUpdate: ({ editor }) => {
+        onUpdate?.(editor);
+      },
+      extensions: [
+        ...defaultExtensions({
+          variables,
+          slashCommands,
+        }),
+        ...(extensions || []),
+      ],
+      content: formattedContent,
+      autofocus,
     },
-    onCreate: ({ editor }) => {
-      onCreate?.(editor);
-    },
-    onUpdate: ({ editor }) => {
-      onUpdate?.(editor);
-    },
-    extensions: [
-      ...defaultExtensions({
-        variables,
-        slashCommands,
-      }),
-      ...(extensions || []),
-    ],
-    content: formattedContent,
-    autofocus,
-  });
+    [formattedContent]
+  );
 
   if (!editor) {
     return null;
