@@ -20,6 +20,7 @@ interface EditorPreviewProps {
 interface MsgObject {
   subject: string;
   html?: string;
+  json?: string;
 }
 
 export function EditorPreview(props: EditorPreviewProps) {
@@ -42,6 +43,12 @@ export function EditorPreview(props: EditorPreviewProps) {
     if (parseData.subject || parseData.html) {
       setParentDefaults(parseData);
       setSubject(parseData.subject || '');
+      if (parseData.json) {
+        const json = JSON.parse(parseData.json);
+        if (json) {
+          setJson(json);
+        }
+      }
     }
   };
 

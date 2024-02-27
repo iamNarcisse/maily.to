@@ -17,6 +17,7 @@ interface SubmitButtonProps {
 interface MsgObject {
   subject: string;
   html?: string;
+  json?: string;
 }
 
 function SubmitButton(props: SubmitButtonProps) {
@@ -61,18 +62,14 @@ export function CopyEmailHtml() {
         return;
       }
 
-      onSave({ html: result?.data, subject });
+      onSave({ html: result?.data, subject, json: JSON.stringify(json) });
       await copy(result?.data || '');
       // toast.success('Email HTML copied to clipboard');
     }
   );
 
   const onSave = (msg: MsgObject) => {
-    const data = {
-      subject: msg.subject,
-      html: msg.html,
-    };
-    parent?.postMessage(JSON.stringify(data), '*');
+    parent?.postMessage(JSON.stringify(msg), '*');
   };
 
   return (
