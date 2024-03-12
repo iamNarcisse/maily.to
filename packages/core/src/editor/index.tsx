@@ -17,6 +17,7 @@ export type EditorProps = {
   contentJson?: JSONContent;
   onUpdate?: (editor?: TiptapEditor) => void;
   onCreate?: (editor?: TiptapEditor) => void;
+  onBlur?: (editor?: TiptapEditor) => void;
   extensions?: Extension[];
   config?: {
     hasMenuBar?: boolean;
@@ -41,6 +42,7 @@ export function Editor(props: EditorProps) {
     } = {},
     onCreate,
     onUpdate,
+    onBlur,
     extensions,
     contentHtml,
     contentJson,
@@ -104,7 +106,9 @@ export function Editor(props: EditorProps) {
       onUpdate: ({ editor }) => {
         onUpdate?.(editor);
       },
-
+      onBlur: ({ editor }) => {
+        onBlur?.(editor);
+      },
       extensions: [
         ...defaultExtensions({
           variables,

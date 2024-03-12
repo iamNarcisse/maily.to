@@ -69,7 +69,7 @@ export function CopyEmailHtml() {
   );
 
   const onSave = (msg: MsgObject) => {
-    parent?.postMessage(JSON.stringify(msg), '*');
+    parent?.postMessage(JSON.stringify({ ...msg, action_type: 'save' }), '*');
   };
 
   return (

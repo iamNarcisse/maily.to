@@ -5,6 +5,7 @@ import { Editor } from '@maily-to/core';
 import type { JSONContent, Editor as TiptapEditor } from '@tiptap/core';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { renderAsync } from '@maily-to/render';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { cn } from '@/utils/classname';
@@ -29,6 +30,18 @@ export function EditorPreview(props: EditorPreviewProps) {
       setJsonContent(defaultContent);
     }
   }, [defaultContent]);
+
+  const onLogChange = async (raw: JSONContent) => {
+    if (!raw) {
+      return;
+    }
+
+    const html = await renderAsync(raw, {
+      preview: '',
+    });
+    const msg = { html, subject, json: JSON.stringify(raw) };
+    parent?.postMessage(JSON.stringify({ action_type: 'edit', ...msg }), '*');
+  };
 
   const defaultHtml = ``;
 
@@ -68,6 +81,11 @@ export function EditorPreview(props: EditorPreviewProps) {
           }}
           contentHtml={defaultHtml}
           contentJson={jsonContent}
+          onBlur={(e: TiptapEditor) => {
+            if (e?.getJSON()) {
+              onLogChange(e.getJSON());
+            }
+          }}
           onCreate={(e) => {
             setEditor(e as unknown as TiptapEditor);
             setJson(e?.getJSON() || {});
