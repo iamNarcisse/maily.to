@@ -1,16 +1,15 @@
 'use client';
 
-import { useFormStatus } from 'react-dom';
 import { ClipboardCopy, Loader2 } from 'lucide-react';
+import { useState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { toast } from 'sonner';
 import { shallow } from 'zustand/shallow';
-import { useEffect, useState } from 'react';
-import type { JSONContent } from '@tiptap/core';
 import { previewEmailAction } from '@/actions/email';
-import { useServerAction } from '@/utils/use-server-action';
-import { useCopyToClipboard } from '@/utils/use-copy-to-clipboard';
-import { useEditorContext } from '@/stores/editor-store';
 import { catchActionError } from '@/actions/error';
+import { useEditorContext } from '@/stores/editor-store';
+import { useCopyToClipboard } from '@/utils/use-copy-to-clipboard';
+import { useServerAction } from '@/utils/use-server-action';
 
 interface SubmitButtonProps {
   disabled?: boolean;
@@ -54,7 +53,7 @@ export function CopyEmailHtml() {
     };
   }, shallow);
 
-  const [localJson, setLocalJson] = useState<string>();
+  const [local, setLocal] = useState<{ subject: string; json: string }>();
 
   const [_, copy] = useCopyToClipboard();
 
@@ -68,7 +67,10 @@ export function CopyEmailHtml() {
 
       onSave({ html: result?.data, subject, json: JSON.stringify(json) });
       await copy(result?.data || '');
-      setLocalJson(JSON.stringify(json));
+      setLocal({
+        subject,
+        json: JSON.stringify(json),
+      });
       // toast.success('Email HTML copied to clipboard');
     }
   );
@@ -77,13 +79,14 @@ export function CopyEmailHtml() {
     parent?.postMessage(JSON.stringify({ ...msg, action_type: 'save' }), '*');
   };
 
-  const notChanged = localJson === JSON.stringify(json);
+  const contentIsChange =
+    local?.json === JSON.stringify(json) && local?.subject === subject;
 
   return (
     <form action={action}>
       <input name="json" type="hidden" value={JSON.stringify(json) || ''} />
       <input name="previewText" type="hidden" value={previewText} />
-      <SubmitButton disabled={!json || !subject || notChanged} />
+      <SubmitButton disabled={!json || !subject || contentIsChange} />
     </form>
   );
 }
